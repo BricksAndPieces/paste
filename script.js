@@ -1,7 +1,10 @@
 /* Adapted version of https://github.com/topaz/paste */
 
 CodeMirror.modeURL = 'https://cdn.jsdelivr.net/npm/codemirror@5.58.1/mode/%N/%N.js';
-let lzma = new LZMA("./lib/lzma-worker.js");
+// let lzma = new LZMA("https://cdn.jsdelivr.net/npm/lzma@2.3.2/src/lzma_worker.min.js");
+
+// const blob = new Blob(['importScripts("https://cdn.jsdelivr.net/npm/lzma@2.3.2/src/lzma_worker.min.js");']);
+// const lzma = new LZMA(window.URL.createObjectURL(blob));
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("paste-wrapper").focus();
@@ -33,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let fr = new FileReader();
         fr.onload = function () {
             let compressed = Array.from(new Uint8Array(fr.result));
-            lzma.decompress(compressed, function (text, error) {
+            LZMA.decompress(compressed, function (text, error) {
                 if (error) {
                     alert("Failed to decompress: " + error);
                     return;
@@ -59,39 +62,24 @@ function langInputChanged() {
 function generateUrl() {
     let plaintext = editor.getValue();
     let lang = document.getElementById('langInput').value;
-    // console.log("Generating Url...")
-    // lzma.compress(plaintext, 1, function (compressed, error) {
-    //     if (error) {
-    //         alert("Failed to compress: " + error);
-    //         return;
-    //     }
+    console.log("Generating Url...")
+    LZMA.compress(plaintext, 1, function (compressed, error) {
+        if (error) {
+            alert("Failed to compress: " + error);
+            return;
+        }
 
-    //     let fr = new FileReader();
-    //     fr.onload = function () {
-    //         let base64 = fr.result.substring(fr.result.indexOf(",") + 1);
-    //         let url = "https://" + location.host + location.pathname + "?l=" + lang + "#" + base64;
-    //         console.log(url);
+        let fr = new FileReader();
+        fr.onload = function () {
+            let base64 = fr.result.substring(fr.result.indexOf(",") + 1);
+            let url = "https://" + location.host + location.pathname + "?l=" + lang + "#" + base64;
+            console.log(url);
 
-    //         showCopyNav(url);
-    //     };
+            showCopyNav(url);
+        };
 
-    //     fr.readAsDataURL(new Blob([new Uint8Array(compressed)]));
-    // });
-
-  lzma.compress(plaintext, 1, function(compressed, error){
-    if (error) {
-      alert("Failed to compress data: "+error);
-      return;
-    }
-
-    var reader = new FileReader();
-    reader.onload = function(){
-      var base64 = reader.result.substr(reader.result.indexOf(",")+1);
-      var url = "https://" + location.host + location.pathname + "?l=" + lang + "#" + base64;
-      showCopyNav(url);
-    };
-    reader.readAsDataURL(new Blob([new Uint8Array(compressed)]));
-  });
+        fr.readAsDataURL(new Blob([new Uint8Array(compressed)]));
+    });
 }
 
 function showCopyNav(url) {
