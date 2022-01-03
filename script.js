@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("paste-wrapper").focus();
 
     let inFrame = window.location !== window.parent.location;
-    console.log("Is in iFrame?: " + inFrame);
     editor = new CodeMirror(document.getElementById('paste-wrapper'), {
         lineNumbers: true,
         theme: 'one-dark',
