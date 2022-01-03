@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         lineNumbers: true,
         theme: 'one-dark',
         lineWrapping: true,
-        readOnly: !inFrame,
+        readOnly: inFrame,
     });
 
     if (inFrame) {
