@@ -3,11 +3,19 @@ CodeMirror.modeURL = 'https://cdn.jsdelivr.net/npm/codemirror@5.58.1/mode/%N/%N.
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("paste-wrapper").focus();
 
+    let inFrame = window.location !== window.parent.location;
     editor = new CodeMirror(document.getElementById('paste-wrapper'), {
         lineNumbers: true,
         theme: 'one-dark',
         lineWrapping: true,
+        readOnly: !inFrame,
     });
+
+    if (inFrame) {
+        document.getElementById('defaultNav').style.display = 'none';
+        document.getElementById('copyUrlNav').style.display = 'none';
+        document.getElementById('iFrameNav').style.display = 'block';
+    }
 
     if (l = new URLSearchParams(window.location.search).get('l')) {
         let lang = getModeMime(l);
@@ -98,6 +106,10 @@ function cancelUrl() {
 
 function toggleLineWrap() {
     editor.setOption('lineWrapping', !editor.getOption('lineWrapping'));
+}
+
+function openInTab() {
+    window.open(location);
 }
 
 function getModeMime(name) {
