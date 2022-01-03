@@ -1,7 +1,7 @@
 /* Adapted version of https://github.com/topaz/paste */
 
+let lzma = new LZMA("./lib/lzma-worker.js");
 CodeMirror.modeURL = 'https://cdn.jsdelivr.net/npm/codemirror@5.58.1/mode/%N/%N.js';
-let lzma = new LZMA("https://cdn.jsdelivr.net/npm/lzma@2.3.2/src/lzma_worker.min.js");
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("paste-wrapper").focus();
