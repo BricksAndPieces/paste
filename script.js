@@ -59,6 +59,7 @@ function langInputChanged() {
 function generateUrl() {
     let plaintext = editor.getValue();
     let lang = document.getElementById('langInput').value;
+    console.log("Generating Url...")
     lzma.compress(plaintext, 1, function (compressed, error) {
         if (error) {
             alert("Failed to compress: " + error);
