@@ -78,3 +78,7 @@ input:focus, textarea:focus, select:focus{
     color: inherit;
     margin-right: 5px;
 }
+
+#iFrameNav {
+    display: none;
+}
